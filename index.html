@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="classic">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nudge</title>
+<meta name="description" content="A calm, calendar-free place for the things worth remembering.">
+<meta name="theme-color" content="#F4EEE3" id="meta-theme">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Nudge">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23E2553A'/%3E%3Ccircle cx='32' cy='32' r='11' fill='%23FFF6EC'/%3E%3C/svg%3E">
+<script>try{document.documentElement.dataset.theme=localStorage.getItem("nudge.theme")||"classic"}catch(e){}</script>
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Baloo+2:wght@500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+  /* ============ THEMES ============ */
+  :root,[data-theme="classic"]{
+    --bg:#F4EEE3; --bg-img:none; --card:#FFFCF6; --ink:#1E1A16; --muted:#7A7064; --line:#E7DDCC; --chip:#F4EEE3;
+    --accent:#E2553A; --accent-ink:#FFF6EC; --accent-soft:#FBE2D9;
+    --hero:#E2553A; --hero-ink:#FFF6EC; --hero-calm:#DCEDE6; --hero-calm-ink:#1E1A16;
+    --today:#2F6F5E; --today-soft:#DCEDE6; --over:#B4400F; --over-soft:#FADFCF;
+    --shadow:0 1px 0 rgba(30,26,22,.04), 0 8px 24px -12px rgba(30,26,22,.18);
+    --bw:1px; --radius:20px;
+    --display:"Fraunces", Georgia, serif; --dw:650; --body:"DM Sans", system-ui, sans-serif;
+    --confetti:#E2553A,#2F6F5E,#F2B134,#7A9CC6;
+  }
+  @media (prefers-color-scheme: dark){
+    [data-theme="classic"]{
+      --bg:#16130F; --card:#211D18; --ink:#F3ECE0; --muted:#A39886; --line:#342D25; --chip:#2B261F;
+      --accent:#F06A4C; --accent-ink:#1A0F0A; --accent-soft:#3A2119;
+      --hero:#F06A4C; --hero-ink:#1A0F0A; --hero-calm:#1C302A; --hero-calm-ink:#F3ECE0;
+      --today:#7CC6AE; --today-soft:#1C302A; --over:#F2945F; --over-soft:#3A2416;
+      --shadow:0 1px 0 rgba(0,0,0,.2), 0 10px 30px -14px rgba(0,0,0,.6);
+    }
+  }
+  [data-theme="bubblegum"]{
+    --bg:#FFE9F4; --bg-img:radial-gradient(circle at 10% 0%, #FFC6E3 0, transparent 40%), radial-gradient(circle at 100% 30%, #E3D2FF 0, transparent 45%), radial-gradient(circle at 0% 100%, #D2F1FF 0, transparent 40%);
+    --card:#FFFFFF; --ink:#3B1E54; --muted:#94709F; --line:#F7CBE3; --chip:#FFF0F8;
+    --accent:#FF4FA3; --accent-ink:#FFFFFF; --accent-soft:#FFE0F0;
+    --hero:linear-gradient(135deg,#FF6FB5 0%,#B36BFF 100%); --hero-ink:#FFFFFF; --hero-calm:linear-gradient(135deg,#E9DCFF,#FFE0F0); --hero-calm-ink:#3B1E54;
+    --today:#7B3FE4; --today-soft:#EFE3FF; --over:#E8336D; --over-soft:#FFE0EA;
+    --shadow:0 10px 30px -14px rgba(179,107,255,.45);
+    --bw:2px; --radius:26px;
+    --display:"Baloo 2", system-ui, sans-serif; --dw:800; --body:"Baloo 2", system-ui, sans-serif;
+    --confetti:#FF4FA3,#B36BFF,#5BD3FF,#FFD84F;
+  }
+  [data-theme="arcade"]{
+    --bg:#0D0A1F; --bg-img:radial-gradient(circle at 85% -10%, rgba(255,79,216,.35) 0, transparent 40%), radial-gradient(circle at -10% 60%, rgba(124,247,212,.18) 0, transparent 40%);
+    --card:#1A1533; --ink:#F2EEFF; --muted:#9D93C9; --line:#2F2757; --chip:#241D45;
+    --accent:#7CF7D4; --accent-ink:#0D0A1F; --accent-soft:#163A3A;
+    --hero:linear-gradient(135deg,#6D5BFF 0%,#FF4FD8 100%); --hero-ink:#FFFFFF; --hero-calm:linear-gradient(135deg,#231C4A,#2E1F4F); --hero-calm-ink:#F2EEFF;
+    --today:#7CF7D4; --today-soft:#163A3A; --over:#FF9B6A; --over-soft:#3C2230;
+    --shadow:0 0 0 1px rgba(124,247,212,.06), 0 12px 32px -14px rgba(109,91,255,.6);
+    --bw:1px; --radius:18px;
+    --display:"Space Grotesk", system-ui, sans-serif; --dw:700; --body:"Space Grotesk", system-ui, sans-serif;
+    --confetti:#7CF7D4,#FF4FD8,#6D5BFF,#FFE66D;
+  }
+  [data-theme="sticker"]{
+    --bg:#FFF1BF; --bg-img:radial-gradient(#F3DC85 1.2px, transparent 1.3px); 
+    --card:#FFFDF4; --ink:#1D1A10; --muted:#6B6448; --line:#1D1A10; --chip:#FFF1BF;
+    --accent:#FF6B35; --accent-ink:#FFFFFF; --accent-soft:#FFE1D3;
+    --hero:#FF6B35; --hero-ink:#FFFFFF; --hero-calm:#9BE3D6; --hero-calm-ink:#1D1A10;
+    --today:#13877A; --today-soft:#C9F1E9; --over:#D62839; --over-soft:#FFD6DA;
+    --shadow:4px 4px 0 #1D1A10;
+    --bw:2px; --radius:18px;
+    --display:"Bricolage Grotesque", system-ui, sans-serif; --dw:800; --body:"Bricolage Grotesque", system-ui, sans-serif;
+    --confetti:#FF6B35,#13877A,#4C6EF5,#FFC300;
+  }
+  [data-theme="lagoon"]{
+    --bg:#E3F6FB; --bg-img:linear-gradient(180deg,#D6F3FB 0%,#EAFBF4 100%);
+    --card:#FFFFFF; --ink:#0B2F3A; --muted:#5D7F89; --line:#CBE9F1; --chip:#EAF8FC;
+    --accent:#0096C7; --accent-ink:#FFFFFF; --accent-soft:#D3F0FA;
+    --hero:linear-gradient(135deg,#0096C7 0%,#3DD6C2 100%); --hero-ink:#FFFFFF; --hero-calm:linear-gradient(135deg,#D2F4EC,#D3F0FA); --hero-calm-ink:#0B2F3A;
+    --today:#0E8F6A; --today-soft:#D2F4EC; --over:#E4572E; --over-soft:#FDE3DA;
+    --shadow:0 10px 30px -16px rgba(0,120,160,.4);
+    --bw:1px; --radius:22px;
+    --display:"Fraunces", Georgia, serif; --dw:650; --body:"DM Sans", system-ui, sans-serif;
+    --confetti:#0096C7,#3DD6C2,#FFB703,#FB8500;
+  }
+  [data-theme="matcha"]{
+    --bg:#EDF1E4; --bg-img:radial-gradient(circle at 100% 0%, #DCE8C8 0, transparent 45%);
+    --card:#FBFCF6; --ink:#1F2A1C; --muted:#6B7A64; --line:#D5DEC6; --chip:#EDF1E4;
+    --accent:#5E8C31; --accent-ink:#FFFFFF; --accent-soft:#E1ECCF;
+    --hero:linear-gradient(135deg,#3E6B2A 0%,#86B35F 100%); --hero-ink:#FFFFFF; --hero-calm:#E1ECCF; --hero-calm-ink:#1F2A1C;
+    --today:#3E6B2A; --today-soft:#E1ECCF; --over:#C2571A; --over-soft:#F7E2D2;
+    --shadow:0 8px 24px -14px rgba(40,60,20,.3);
+    --bw:1px; --radius:20px;
+    --display:"Fraunces", Georgia, serif; --dw:650; --body:"DM Sans", system-ui, sans-serif;
+    --confetti:#5E8C31,#C2571A,#E9C46A,#8AB17D;
+  }
+  [data-theme="sunset"]{
+    --bg:#1E1020; --bg-img:radial-gradient(circle at 50% -20%, rgba(255,120,80,.35) 0, transparent 55%);
+    --card:#2B1830; --ink:#FFEDE3; --muted:#C29EB0; --line:#45293F; --chip:#371F3B;
+    --accent:#FF8C42; --accent-ink:#1E1020; --accent-soft:#4A2A2A;
+    --hero:linear-gradient(135deg,#FF5E62 0%,#FF9966 60%,#FFC371 100%); --hero-ink:#2A0F14; --hero-calm:linear-gradient(135deg,#3A2140,#45263A); --hero-calm-ink:#FFEDE3;
+    --today:#FFC371; --today-soft:#45302A; --over:#FF6B81; --over-soft:#4A2230;
+    --shadow:0 12px 32px -14px rgba(0,0,0,.6);
+    --bw:1px; --radius:22px;
+    --display:"Fraunces", Georgia, serif; --dw:650; --body:"DM Sans", system-ui, sans-serif;
+    --confetti:#FF5E62,#FF9966,#FFC371,#C77DFF;
+  }
+
+  /* ============ BASE ============ */
+  *{box-sizing:border-box}
+  [hidden]{display:none!important}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased;transition:background-color .4s,color .4s}
+  body{min-height:100vh;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);background-image:var(--bg-img);background-attachment:fixed}
+  [data-theme="sticker"] body{background-size:18px 18px}
+  button,input,select,textarea{font:inherit;color:inherit}
+  button{cursor:pointer}
+  .wrap{max-width:640px;margin:0 auto;padding:28px 18px 80px}
+
+  .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:22px}
+  .top-btns{display:flex;gap:8px}
+  .eyebrow{margin:0 0 6px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  h1{font-family:var(--display);font-weight:var(--dw);font-size:clamp(34px,8.5vw,48px);line-height:1;margin:0;letter-spacing:-.02em}
+  h1 .wave{display:inline-block;transform-origin:70% 70%;animation:wave 2.4s ease-in-out 1}
+  @keyframes wave{0%,60%,100%{transform:rotate(0)}10%,30%{transform:rotate(14deg)}20%{transform:rotate(-8deg)}40%{transform:rotate(-4deg)}50%{transform:rotate(10deg)}}
+  .sub{margin:10px 0 0;color:var(--muted);font-size:16px}
+  .sub b{color:var(--ink);font-weight:700}
+  .icon-btn{flex:none;width:44px;height:44px;border-radius:14px;border:var(--bw) solid var(--line);background:var(--card);display:grid;place-items:center;font-size:19px;box-shadow:var(--shadow);transition:transform .15s}
+  .icon-btn:hover{transform:rotate(-6deg) scale(1.05)}
+  .icon-btn:active{transform:scale(.92)}
+  .icon-btn.on{background:var(--today-soft)}
+
+  /* capture */
+  .capture{background:var(--card);border-radius:calc(var(--radius) + 4px);padding:14px;box-shadow:var(--shadow);border:var(--bw) solid var(--line);position:relative}
+  .capture-row{display:flex;gap:10px;align-items:center}
+  #capture-input{flex:1;min-width:0;border:0;background:transparent;font-size:18px;padding:12px 6px;outline:none}
+  #capture-input::placeholder{color:var(--muted);opacity:.85}
+  .mic{flex:none;width:58px;height:58px;border-radius:50%;border:0;background:var(--hero);color:var(--hero-ink);display:grid;place-items:center;position:relative;transition:transform .2s cubic-bezier(.3,1.6,.5,1);isolation:isolate}
+  [data-theme="sticker"] .mic{border:2px solid var(--ink);box-shadow:3px 3px 0 var(--ink)}
+  .mic:hover{transform:scale(1.07) rotate(-4deg)}
+  .mic:active{transform:scale(.92)}
+  .mic svg{width:24px;height:24px}
+  .mic.listening::before,.mic.listening::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--accent);opacity:.35;animation:pulse 1.6s ease-out infinite;z-index:-1}
+  .mic.listening::after{animation-delay:.8s}
+  .mic[disabled]{opacity:.35;cursor:not-allowed}
+  @keyframes pulse{from{transform:scale(1);opacity:.45}to{transform:scale(2);opacity:0}}
+  .preview{display:flex;flex-wrap:wrap;gap:6px;padding:4px 6px 2px}
+  .chip{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;padding:5px 11px;border-radius:999px;background:var(--chip);color:var(--ink);animation:pop .25s cubic-bezier(.3,1.6,.5,1)}
+  .chip.soft{color:var(--muted)}
+  @keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+  .capture-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 6px 2px}
+  .hint{font-size:13px;color:var(--muted);line-height:1.35}
+  .add-btn{border:0;background:var(--ink);color:var(--bg);font-weight:700;padding:10px 22px;border-radius:999px;flex:none;transition:transform .15s}
+  .add-btn:not(:disabled):hover{transform:translateY(-2px)}
+  .add-btn:disabled{opacity:.3;cursor:default}
+
+  /* hero */
+  .hero{margin:26px 0 8px;border-radius:var(--radius);padding:22px;background:var(--hero);color:var(--hero-ink);position:relative;overflow:hidden;cursor:pointer;box-shadow:var(--shadow);border:var(--bw) solid transparent;transition:transform .2s}
+  [data-theme="sticker"] .hero{border-color:var(--ink)}
+  .hero:hover{transform:translateY(-2px) rotate(-.4deg)}
+  .hero::after{content:"";position:absolute;right:-50px;top:-60px;width:190px;height:190px;border-radius:50%;background:rgba(255,255,255,.14);animation:float 7s ease-in-out infinite}
+  .hero::before{content:"";position:absolute;right:70px;bottom:-40px;width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,.1);animation:float 9s ease-in-out infinite reverse}
+  @keyframes float{50%{transform:translate(-14px,12px)}}
+  .hero .label{font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.85;font-weight:700}
+  .hero .title{font-family:var(--display);font-size:clamp(25px,6.2vw,32px);font-weight:var(--dw);margin:8px 0 4px;line-height:1.1;position:relative;z-index:1}
+  .hero .when{font-size:15px;opacity:.9;position:relative;z-index:1}
+  .hero .count{display:flex;gap:10px;margin-top:16px;position:relative;z-index:1}
+  .hero .count div{display:flex;flex-direction:column;align-items:center;background:rgba(255,255,255,.18);border-radius:14px;padding:8px 14px;min-width:68px}
+  .hero .count b{font-family:var(--display);font-size:32px;line-height:1;font-weight:var(--dw)}
+  .hero .count span{font-size:11px;opacity:.85;margin-top:4px;text-transform:uppercase;letter-spacing:.06em}
+  .hero.calm{background:var(--hero-calm);color:var(--hero-calm-ink)}
+  .hero.calm .count div{background:rgba(127,127,127,.12)}
+
+  /* groups */
+  .group{margin-top:28px}
+  .group h2{display:flex;align-items:center;gap:8px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:0 0 10px 4px}
+  .group h2 .gi{font-size:16px;letter-spacing:0}
+  .group h2 .n{background:var(--chip);color:var(--ink);border-radius:999px;padding:1px 8px;font-size:12px;letter-spacing:0}
+  .group.overdue h2{color:var(--over)}
+  .group.today h2{color:var(--today)}
+  .list{display:flex;flex-direction:column;gap:10px}
+  .item{display:flex;align-items:center;gap:12px;background:var(--card);border:var(--bw) solid var(--line);border-radius:calc(var(--radius) - 2px);padding:12px;box-shadow:var(--shadow);transition:transform .25s cubic-bezier(.3,1.4,.5,1), opacity .25s, background .4s;animation:slideIn .35s cubic-bezier(.3,1.3,.5,1) backwards}
+  .item:hover{transform:translateY(-2px)}
+  [data-theme="sticker"] .item:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+  .list .item:nth-child(2){animation-delay:.04s}.list .item:nth-child(3){animation-delay:.08s}.list .item:nth-child(4){animation-delay:.12s}
+  @keyframes slideIn{from{opacity:0;transform:translateY(10px)}}
+  .item.flash{background:var(--accent-soft)}
+  .item.flash .emo{animation:boing .7s cubic-bezier(.3,1.8,.5,1)}
+  .item.leaving{opacity:0;transform:translateX(40px) rotate(3deg) scale(.96)}
+  @keyframes boing{0%{transform:scale(.4) rotate(-20deg)}100%{transform:scale(1) rotate(0)}}
+  .emo{flex:none;width:46px;height:46px;border-radius:15px;background:var(--chip);display:grid;place-items:center;font-size:23px;transition:transform .25s cubic-bezier(.3,1.8,.5,1)}
+  .item:hover .emo{transform:rotate(-10deg) scale(1.12)}
+  [data-theme="sticker"] .emo{border:2px solid var(--ink)}
+  .group.overdue .emo{background:var(--over-soft)}
+  .group.today .emo{background:var(--today-soft)}
+  .body{flex:1;min-width:0;cursor:pointer;padding:2px 0}
+  .body .t{font-weight:600;font-size:16.5px;line-height:1.3;overflow-wrap:anywhere}
+  .body .m{font-size:13px;color:var(--muted);margin-top:3px;display:flex;flex-wrap:wrap;gap:4px 10px}
+  .body .m .rel{font-weight:700;color:var(--ink)}
+  .group.overdue .body .m .rel{color:var(--over)}
+  .group.today .body .m .rel{color:var(--today)}
+  .acts{display:flex;gap:6px;flex:none}
+  .act{width:40px;height:40px;border-radius:12px;border:var(--bw) solid var(--line);background:transparent;display:grid;place-items:center;color:var(--muted);transition:background .15s, color .15s, transform .2s cubic-bezier(.3,1.8,.5,1)}
+  .act:hover{background:var(--chip);color:var(--ink);transform:scale(1.1)}
+  .act.snooze:hover svg{transform:rotate(-200deg)}
+  .act svg{width:18px;height:18px;transition:transform .4s}
+  .act.done:hover{background:var(--today-soft);color:var(--today)}
+  .act.done:active{transform:scale(.85)}
+
+  .empty{text-align:center;color:var(--muted);padding:40px 16px 10px}
+  .empty .art{font-size:54px;animation:float 4s ease-in-out infinite;display:inline-block}
+  .empty .big{font-family:var(--display);font-weight:var(--dw);font-size:26px;color:var(--ink);margin:8px 0 6px}
+  .examples{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px}
+  .examples button{border:var(--bw) dashed var(--line);background:var(--card);border-radius:999px;padding:7px 13px;font-size:14px;color:var(--ink);transition:transform .2s}
+  [data-theme="sticker"] .examples button{border-style:solid}
+  .examples button:hover{transform:translateY(-2px) rotate(-1deg)}
+
+  details.done-wrap{margin-top:30px}
+  details.done-wrap summary{cursor:pointer;color:var(--muted);font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;list-style:none;padding:6px 4px}
+  details.done-wrap summary::-webkit-details-marker{display:none}
+  .done-item{display:flex;align-items:center;gap:10px;padding:8px 4px;color:var(--muted);border-bottom:1px solid var(--line);font-size:15px}
+  .done-item s{flex:1;min-width:0;overflow-wrap:anywhere}
+  .linkish{border:0;background:none;color:var(--muted);text-decoration:underline;text-underline-offset:3px;font-size:13px;padding:4px}
+  footer{margin-top:48px;display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;align-items:center;font-size:13px;color:var(--muted)}
+
+  /* dialogs */
+  dialog{border:var(--bw) solid var(--line);border-radius:26px;padding:0;width:min(520px,calc(100vw - 24px));background:var(--card);color:var(--ink);box-shadow:0 30px 80px -20px rgba(0,0,0,.45)}
+  [data-theme="sticker"] dialog{box-shadow:6px 6px 0 var(--ink)}
+  dialog[open]{animation:dlg .3s cubic-bezier(.3,1.4,.5,1)}
+  @keyframes dlg{from{transform:translateY(20px) scale(.96);opacity:0}}
+  dialog::backdrop{background:rgba(20,16,12,.45);backdrop-filter:blur(3px)}
+  .ed{padding:22px;display:flex;flex-direction:column;gap:14px}
+  .ed h3{font-family:var(--display);font-size:26px;margin:0;font-weight:var(--dw)}
+  .ed label{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted);font-weight:600}
+  .ed input,.ed select,.ed textarea{border:var(--bw) solid var(--line);background:var(--chip);border-radius:12px;padding:11px 12px;font-size:16px;outline:none;width:100%}
+  .ed input:focus,.ed select:focus,.ed textarea:focus{border-color:var(--accent)}
+  .ed .row{display:flex;gap:10px}
+  .ed .row > *{flex:1;min-width:0}
+  .ed .emo-in{flex:0 0 72px}
+  .ed .emo-in input{text-align:center;font-size:22px;padding:7px}
+  .ed .btns{display:flex;gap:10px;margin-top:6px;align-items:center}
+  .ed .btns .spacer{flex:1}
+  .btn{border:0;border-radius:999px;padding:11px 20px;font-weight:700}
+  .btn.primary{background:var(--ink);color:var(--bg)}
+  .btn.ghost{background:transparent;border:var(--bw) solid var(--line)}
+  .btn.danger{background:transparent;color:var(--over);padding-left:4px}
+  .quick{display:flex;flex-wrap:wrap;gap:6px}
+  .quick button,.emoji-row button{border:var(--bw) solid var(--line);background:transparent;border-radius:999px;padding:6px 11px;font-size:13px}
+  .emoji-row{display:flex;flex-wrap:wrap;gap:4px}
+  .emoji-row button{font-size:18px;padding:4px 7px;border-radius:10px;transition:transform .2s cubic-bezier(.3,1.8,.5,1)}
+  .emoji-row button:hover{transform:scale(1.25) rotate(-8deg)}
+
+  /* theme picker */
+  .themes{padding:22px}
+  .themes h3{font-family:var(--display);font-weight:var(--dw);font-size:26px;margin:0 0 4px}
+  .themes p{margin:0 0 16px;color:var(--muted);font-size:14px}
+  .steps{margin:0;padding-left:20px;line-height:1.6;font-size:15px}
+  .steps li{margin-bottom:6px}
+  .theme-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+  .tcard{border:2px solid transparent;border-radius:18px;padding:0;overflow:hidden;text-align:left;background:none;transition:transform .2s cubic-bezier(.3,1.6,.5,1)}
+  .tcard:hover{transform:translateY(-3px) rotate(-1deg)}
+  .tcard.sel{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  .tcard .sw{height:78px;position:relative;padding:10px;display:flex;flex-direction:column;justify-content:flex-end;gap:6px}
+  .tcard .sw .bar{height:22px;border-radius:8px}
+  .tcard .sw .dots{display:flex;gap:5px}
+  .tcard .sw .dots i{width:14px;height:14px;border-radius:50%;display:block}
+  .tcard .nm{padding:8px 10px 10px;font-weight:700;font-size:15px;display:flex;justify-content:space-between;align-items:center}
+  .tcard .nm small{font-weight:500;font-size:11px;opacity:.7}
+
+  /* toast */
+  .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translate(-50%,160%);background:var(--ink);color:var(--bg);padding:12px 14px 12px 18px;border-radius:16px;display:flex;align-items:center;gap:14px;font-size:15px;font-weight:600;max-width:calc(100vw - 24px);box-shadow:0 14px 40px -10px rgba(0,0,0,.4);transition:transform .35s cubic-bezier(.2,1.4,.4,1);z-index:50}
+  .toast.show{transform:translate(-50%,0)}
+  .toast button{border:0;background:var(--accent);color:var(--accent-ink);border-radius:10px;padding:7px 12px;font-weight:700;font-size:14px}
+
+  .alert-banner{margin-top:18px;background:var(--over-soft);color:var(--over);border-radius:16px;padding:12px 16px;font-weight:600;display:flex;gap:10px;align-items:center;animation:wiggle .6s ease 2}
+  @keyframes wiggle{25%{transform:rotate(-1deg)}75%{transform:rotate(1deg)}}
+
+  /* confetti */
+  .confetti{position:fixed;pointer-events:none;z-index:60;width:9px;height:13px;border-radius:2px;animation:burst .95s cubic-bezier(.15,.6,.35,1) forwards}
+  .confetti.round{border-radius:50%;width:9px;height:9px}
+  @keyframes burst{0%{transform:translate(-50%,-50%) rotate(0);opacity:1}100%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) rotate(var(--r));opacity:0}}
+
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="top">
+    <div>
+      <p class="eyebrow" id="today-label"></p>
+      <h1 id="greeting">Hello.</h1>
+      <p class="sub" id="summary"></p>
+    </div>
+    <div class="top-btns">
+      <button class="icon-btn" id="theme-btn" title="Change theme" aria-label="Change theme">🎨</button>
+      <button class="icon-btn" id="notif-btn" title="Turn on reminders" aria-label="Turn on reminders">🔕</button>
+    </div>
+  </header>
+
+  <form class="capture" id="capture-form" autocomplete="off">
+    <div class="capture-row">
+      <label for="capture-input" class="sr">What do you need to remember?</label>
+      <input id="capture-input" placeholder="Dentist next Tuesday at 3pm…" enterkeyhint="done">
+      <button type="button" class="mic" id="mic-btn" aria-label="Add by voice" title="Add by voice">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3.5"/></svg>
+      </button>
+    </div>
+    <div class="preview" id="preview" hidden></div>
+    <div class="capture-foot">
+      <span class="hint" id="hint">Type or tap the mic. Say it like you'd tell a friend.</span>
+      <button type="submit" class="add-btn" id="add-btn" disabled>Add</button>
+    </div>
+  </form>
+
+  <div id="alert"></div>
+  <section id="hero"></section>
+  <section id="lists"></section>
+  <details class="done-wrap" id="done-wrap" hidden>
+    <summary id="done-summary">Done</summary>
+    <div id="done-list"></div>
+    <button class="linkish" id="clear-done">Clear done items</button>
+  </details>
+
+  <footer>
+    <span>Saved on this device only</span>·
+    <button class="linkish" id="export-btn">Back up</button>
+    <button class="linkish" id="import-btn">Restore</button>
+    <input type="file" id="import-file" accept="application/json,.json" hidden>
+  </footer>
+</main>
+
+<dialog id="editor">
+  <form class="ed" id="ed-form" method="dialog">
+    <h3 id="ed-heading">Edit</h3>
+    <div class="row">
+      <label class="emo-in">Icon<input id="ed-emoji" maxlength="4"></label>
+      <label>What<input id="ed-title" required></label>
+    </div>
+    <div class="emoji-row" id="emoji-row"></div>
+    <div class="row">
+      <label>Day<input type="date" id="ed-date"></label>
+      <label>Time (optional)<input type="time" id="ed-time"></label>
+    </div>
+    <div class="quick" id="ed-quick">
+      <button type="button" data-q="today">Today</button>
+      <button type="button" data-q="tomorrow">Tomorrow</button>
+      <button type="button" data-q="week">Next week</button>
+      <button type="button" data-q="none">No date</button>
+    </div>
+    <div class="row">
+    <label>Repeats
+      <select id="ed-repeat">
+        <option value="">Doesn't repeat</option>
+        <option value="daily">Every day</option>
+        <option value="weekly">Every week</option>
+        <option value="monthly">Every month</option>
+        <option value="yearly">Every year</option>
+      </select>
+    </label>
+    <label>Heads-up
+      <select id="ed-lead">
+        <option value="0">Just when it happens</option>
+        <option value="10">+ 10 min before</option>
+        <option value="60">+ 1 hour before</option>
+        <option value="1440">+ 1 day before</option>
+      </select>
+    </label>
+    </div>
+    <label>Notes<textarea id="ed-notes" rows="2" placeholder="Anything helpful — address, what to bring…"></textarea></label>
+    <div class="btns">
+      <button type="button" class="btn danger" id="ed-delete">Delete</button>
+      <span class="spacer"></span>
+      <button type="button" class="btn ghost" id="ed-cancel">Cancel</button>
+      <button type="submit" class="btn primary">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="help-dlg">
+  <div class="themes">
+    <h3 id="help-title">One quick step 📲</h3>
+    <div id="help-body"></div>
+    <div class="ed" style="padding:16px 0 0"><div class="btns"><span class="spacer"></span><button class="btn primary" id="help-done">Got it</button></div></div>
+  </div>
+</dialog>
+
+<dialog id="theme-dlg">
+  <div class="themes">
+    <h3>Pick a vibe</h3>
+    <p>Change it whenever you get bored of it.</p>
+    <div class="theme-grid" id="theme-grid"></div>
+    <div class="ed" style="padding:16px 0 0"><div class="btns"><span class="spacer"></span><button class="btn primary" id="theme-done">Done</button></div></div>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toast-msg"></span><button id="toast-btn" hidden>Undo</button></div>
+
+<script>
+/*PARSER-START*/
+const WORDNUM = {a:1,an:1,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,couple:2,few:3};
+const MONTHS = {jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
+const DOW = {sun:0,mon:1,tue:2,wed:3,thu:4,fri:5,sat:6};
+const MONTH_RE = '(january|jan|february|feb|march|mar|april|apr|may|june|jun|july|jul|august|aug|september|sept|sep|october|oct|november|nov|december|dec)';
+
+function startOfDay(d){ const x = new Date(d); x.setHours(0,0,0,0); return x; }
+function addDays(d,n){ const x = new Date(d); x.setDate(x.getDate()+n); return x; }
+function addMonths(d,n){ const x = new Date(d); const day = x.getDate(); x.setDate(1); x.setMonth(x.getMonth()+n); const last = new Date(x.getFullYear(), x.getMonth()+1, 0).getDate(); x.setDate(Math.min(day,last)); return x; }
+function num(w){ w = String(w).toLowerCase(); return /^\d+$/.test(w) ? parseInt(w,10) : (WORDNUM[w] || null); }
+
+function parseInput(raw, now = new Date()){
+  let s = ' ' + String(raw).replace(/\s+/g,' ').trim() + ' ';
+  const today = startOfDay(now);
+  let date = null, time = null, repeat = null, exact = null, partOfDay = null, sameDow = false;
+
+  // Try every match of re; fn returns false to reject. On accept, cut it out of s.
+  const cut = (re, fn) => {
+    const g = new RegExp(re.source, re.flags.includes('g') ? re.flags : re.flags + 'g');
+    for (const m of s.matchAll(g)) {
+      if (fn(m) !== false) { s = s.slice(0, m.index) + ' ' + s.slice(m.index + m[0].length); return true; }
+    }
+    return false;
+  };
+
+  // ---- repeats
+  cut(/\b(?:every|each)\s+(day|morning|night|evening|week|month|year)\b/i, m => {
+    const u = m[1].toLowerCase();
+    repeat = {day:'daily',morning:'daily',night:'daily',evening:'daily',week:'weekly',month:'monthly',year:'yearly'}[u];
+    if (u==='morning') partOfDay = 'morning'; if (u==='night'||u==='evening') partOfDay = 'evening';
+  });
+  if (!repeat) cut(/\b(daily|weekly|monthly|yearly|annually)\b/i, m => { const u = m[1].toLowerCase(); repeat = u==='annually' ? 'yearly' : u; });
+  if (!repeat) cut(/\bevery\s+(?=(?:sun|mon|tue|wed|thu|fri|sat))/i, () => { repeat = 'weekly'; s = s; });
+  if (repeat === 'weekly') s = s.replace(/\b(sunday|monday|tuesday|wednesday|thursday|friday|saturday)s\b/i, '$1');
+
+  // ---- times
+  cut(/(?:\bat\s+|@\s*)?\b(noon|midday)\b/i, () => { time = {h:12,m:0}; });
+  if (!time) cut(/(?:\bat\s+|@\s*)?\b(\d{1,2})(?:[:.](\d{2}))?\s*([ap])\.?\s?m\b\.?/i, m => {
+    let h = +m[1], mi = m[2] ? +m[2] : 0; if (h>12 || mi>59) return false;
+    const pm = m[3].toLowerCase()==='p'; if (h===12) h = pm ? 12 : 0; else if (pm) h += 12;
+    time = {h, m:mi};
+  });
+  if (!time) cut(/(?:\bat\s+|@\s*)(\d{1,2})(?::(\d{2}))?\b(?!\s*(?:st|nd|rd|th|\/|-|days?|weeks?|hours?|hrs?|minutes?|mins?|months?|years?))/i, m => {
+    let h = +m[1], mi = m[2] ? +m[2] : 0; if (h>23 || mi>59) return false;
+    if (h>=1 && h<=7) h += 12; // "at 3" almost always means 3pm
+    time = {h, m:mi};
+  });
+  if (!time) cut(/\b([01]?\d|2[0-3]):([0-5]\d)\b/, m => { time = {h:+m[1], m:+m[2]}; });
+  // "o'clock" leftovers
+  s = s.replace(/\bo'?\s?clock\b/i, ' ');
+
+  // ---- relative durations
+  cut(/\bin\s+half\s+an?\s+hour\b/i, () => { exact = new Date(now.getTime() + 30*60000); });
+  if (!exact) cut(/\bin\s+(?:a\s+)?(\d+|an?|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|couple|few)\s+(?:of\s+)?(minutes?|mins?|hours?|hrs?|days?|weeks?|months?|years?)\b/i, m => {
+    const n = num(m[1]); if (!n) return false; const u = m[2].toLowerCase();
+    if (/^min/.test(u)) exact = new Date(now.getTime() + n*60000);
+    else if (/^(hour|hr)/.test(u)) exact = new Date(now.getTime() + n*3600000);
+    else if (/^day/.test(u)) date = addDays(today, n);
+    else if (/^week/.test(u)) date = addDays(today, n*7);
+    else if (/^month/.test(u)) date = addMonths(today, n);
+    else date = addMonths(today, n*12);
+  });
+
+  // ---- named days
+  if (!date && !exact) cut(/\b(?:the\s+)?day\s+after\s+tomorrow\b/i, () => { date = addDays(today,2); });
+  if (!date && !exact) cut(/\b(?:tomorrow|tmrw|tmr|tomorow)\b/i, () => { date = addDays(today,1); });
+  if (!date && !exact) cut(/\btonight\b/i, () => { date = today; partOfDay = partOfDay || 'tonight'; });
+  if (!date && !exact) cut(/\btoday\b/i, () => { date = today; });
+  if (!date && !exact) cut(/\b(this|next)\s+weekend\b/i, m => { const d = (6 - today.getDay() + 7) % 7; date = addDays(today, d + (m[1].toLowerCase()==='next' && d<5 ? 7 : 0)); });
+  if (!date && !exact) cut(/\bnext\s+week\b/i, () => { const d = ((1 - today.getDay() + 7) % 7) || 7; date = addDays(today, d); });
+  if (!date && !exact) cut(/\bnext\s+month\b/i, () => { date = new Date(today.getFullYear(), today.getMonth()+1, 1); });
+  if (!date && !exact) cut(/\bnext\s+year\b/i, () => { date = new Date(today.getFullYear()+1, 0, 1); });
+  if (!date && !exact) cut(/\b(?:by\s+|at\s+)?(?:the\s+)?end\s+of\s+(?:the\s+)?(week|month)\b/i, m => {
+    date = m[1].toLowerCase()==='week' ? addDays(today, (5 - today.getDay() + 7) % 7) : new Date(today.getFullYear(), today.getMonth()+1, 0);
+  });
+
+  // ---- weekdays
+  const setDow = (word, mod) => {
+    const target = DOW[word.slice(0,3).toLowerCase()];
+    let d = (target - today.getDay() + 7) % 7;
+    if (mod && mod.toLowerCase()==='next' && d===0) d = 7;
+    sameDow = d === 0;
+    date = addDays(today, d);
+  };
+  if (!date && !exact) cut(/\b(?:(next|this|on|coming|by)\s+)?(sunday|monday|tuesday|wednesday|thursday|friday|saturday)\b/i, m => setDow(m[2], m[1]));
+  if (!date && !exact) cut(/\b(next|this|on|by)\s+(sun|mon|tues?|wed|thu(?:rs?)?|fri|sat)\b\.?/i, m => setDow(m[2], m[1]));
+
+  // ---- calendar dates
+  const fixYear = (y, mo, d) => {
+    let yr = y ? +y : today.getFullYear(); if (yr < 100) yr += 2000;
+    let dt = new Date(yr, mo, d);
+    if (dt.getMonth() !== mo) return null;
+    if (!y && dt < today) dt = new Date(yr+1, mo, d);
+    return dt;
+  };
+  if (!date && !exact) cut(new RegExp('\\b(?:on\\s+|by\\s+)?(?:the\\s+)?(\\d{1,2})(?:st|nd|rd|th)?\\s+(?:of\\s+)?' + MONTH_RE + '\\b\\.?(?:,?\\s+(\\d{4}))?', 'i'), m => {
+    const d = fixYear(m[3], MONTHS[m[2].slice(0,3).toLowerCase()], +m[1]); if (!d) return false; date = d;
+  });
+  if (!date && !exact) cut(new RegExp('\\b(?:on\\s+|by\\s+)?' + MONTH_RE + '\\b\\.?\\s+(?:the\\s+)?(\\d{1,2})(?:st|nd|rd|th)?\\b(?:,?\\s+(\\d{4}))?', 'i'), m => {
+    const d = fixYear(m[3], MONTHS[m[1].slice(0,3).toLowerCase()], +m[2]); if (!d) return false; date = d;
+  });
+  if (!date && !exact) cut(/\b(?:on\s+|by\s+)?(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?\b/, m => {
+    const d = fixYear(m[3], +m[1]-1, +m[2]); if (!d) return false; date = d;
+  });
+  if (!date && !exact) cut(/\b(?:on\s+|by\s+)?the\s+(\d{1,2})(?:st|nd|rd|th)\b/i, m => {
+    const n = +m[1]; if (n<1 || n>31) return false;
+    let d = new Date(today.getFullYear(), today.getMonth(), n);
+    if (d < today || d.getDate()!==n) d = new Date(today.getFullYear(), today.getMonth()+1, n);
+    date = d;
+  });
+
+  // ---- parts of day
+  cut(/\b(?:in\s+the\s+|this\s+)?(morning|afternoon|evening)\b/i, m => { partOfDay = partOfDay || m[1].toLowerCase(); });
+  if (!time && partOfDay) time = {morning:{h:9,m:0}, afternoon:{h:14,m:0}, evening:{h:18,m:0}, tonight:{h:19,m:0}}[partOfDay];
+
+  // ---- title
+  let title = s
+    .replace(/^\s*(?:hey\s+)?(?:please\s+)?(?:can you\s+)?(?:remind me\s+(?:to|about|that|of)?|remember\s+(?:to|that)?|don'?t\s+(?:let me\s+)?forget\s+(?:to|about|that)?|i\s+(?:need|have|got)\s+to|need\s+to|i\s+have|add(?:\s+an?)?(?:\s+reminder)?(?:\s+(?:to|for))?)\s+/i, ' ')
+    .replace(/[,;]+/g, ' ')
+    .replace(/\s+/g, ' ').trim();
+  for (let i=0;i<4;i++){
+    title = title.replace(/\s+(?:on|at|by|for|in|this|next|the|of|due|from|starting|is|and)\s*$/i, '').replace(/^(?:on|at|by|and)\s+/i,'').trim();
+  }
+  title = title.replace(/[.\s]+$/,'');
+  if (title) title = title.charAt(0).toUpperCase() + title.slice(1);
+
+  // ---- emoji + smart default repeat
+  const emoji = guessEmoji(raw);
+  if (!repeat && /\b(birthday|bday|b-day|anniversary)\b/i.test(raw)) repeat = 'yearly';
+
+  // ---- resolve when
+  let when = null, allDay = true;
+  if (exact) { when = exact; allDay = false; }
+  else if (date || time) {
+    const base = new Date(date || today);
+    if (time) { base.setHours(time.h, time.m, 0, 0); allDay = false; if (!date && base <= now) base.setDate(base.getDate()+1); if (sameDow && base <= now) base.setDate(base.getDate()+7); }
+    when = base;
+  } else if (repeat) { when = today; }
+
+  return { title: title || String(raw).trim(), when, allDay, repeat, emoji };
+}
+
+function guessEmoji(t){
+  const rules = [
+    [/\b(birthday|bday|b-day)\b/i,'🎂'], [/\banniversary\b/i,'💍'],
+    [/\b(meds|medication|pills?|prescription|pharmacy|refill)\b/i,'💊'],
+    [/\b(doctor|dr\.?|dentist|appointment|appt|therapy|therapist|checkup|clinic|hospital|ortho)\b/i,'🩺'],
+    [/\b(vet|dog|cat|puppy|kitten|pet)\b/i,'🐾'],
+    [/\b(bill|pay|rent|payment|invoice|tax|taxes|mortgage|insurance|bank)\b/i,'💸'],
+    [/\b(call|phone|text|email|reply)\b/i,'📞'],
+    [/\b(flight|trip|travel|vacation|airport|hotel|pack)\b/i,'✈️'],
+    [/\b(school|class|exam|test|homework|assignment|teacher|essay)\b/i,'🎒'],
+    [/\b(meeting|interview|work|deadline|presentation|boss|client)\b/i,'💼'],
+    [/\b(car|oil change|registration|inspection|tires?|mechanic)\b/i,'🚗'],
+    [/\b(trash|garbage|recycling|bins?)\b/i,'🗑️'],
+    [/\b(groceries|grocery|buy|shop|shopping|order|gift|present)\b/i,'🛒'],
+    [/\b(gym|workout|run|yoga|walk)\b/i,'🏃'],
+    [/\b(party|dinner|lunch|brunch|date|drinks|wedding|concert|show)\b/i,'🥂'],
+    [/\b(clean|laundry|dishes|vacuum)\b/i,'🧺'],
+    [/\b(water|plants?)\b/i,'🪴'],
+    [/\b(renew|expires?|license|passport|subscription|cancel)\b/i,'📄'],
+  ];
+  for (const [re,e] of rules) if (re.test(t)) return e;
+  return '✨';
+}
+/*PARSER-END*/
+
+// ================= app =================
+const KEY = 'nudge.items.v1';
+const PUSH_KEY = 'nudge.push';
+let pushOn = (() => { try { return localStorage.getItem(PUSH_KEY) === 'on'; } catch { return false; } })();
+const $ = id => document.getElementById(id);
+let items = load();
+let lastDeleted = null;
+
+function load(){ try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch { return []; } }
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(items)); } catch {} scheduleSync(); }
+const uid = () => Math.random().toString(36).slice(2,10) + Date.now().toString(36);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+const fmtTime = d => d.toLocaleTimeString([], {hour:'numeric', minute:'2-digit'});
+const fmtDate = (d, withYear) => d.toLocaleDateString([], {weekday:'short', month:'short', day:'numeric', ...(withYear ? {year:'numeric'} : {})});
+const dayDiff = (d, now=new Date()) => Math.round((startOfDay(d) - startOfDay(now)) / 864e5);
+const LEAD_SHORT = {10:'10m before', 60:'1h before', 1440:'day before'};
+const REPEAT_LABEL = {daily:'Every day', weekly:'Every week', monthly:'Every month', yearly:'Every year'};
+
+function isOverdue(it, now=new Date()){
+  if (!it.when) return false; const w = new Date(it.when);
+  return it.allDay ? dayDiff(w, now) < 0 : w < now;
+}
+function bucket(it, now=new Date()){
+  if (!it.when) return 'someday';
+  if (isOverdue(it, now)) return 'overdue';
+  const dd = dayDiff(new Date(it.when), now);
+  if (dd === 0) return 'today'; if (dd === 1) return 'tomorrow'; if (dd < 7) return 'week'; return 'later';
+}
+function relLabel(it, now=new Date()){
+  if (!it.when) return 'Whenever';
+  const w = new Date(it.when), dd = dayDiff(w, now);
+  if (isOverdue(it, now)) {
+    if (!it.allDay && dd === 0) { const h = Math.floor((now - w)/3600000); return h < 1 ? 'Just now' : `${h} hr${h>1?'s':''} ago`; }
+    const n = -dd; return n === 1 ? 'Yesterday' : `${n} days ago`;
+  }
+  if (dd === 0) {
+    if (it.allDay) return 'Today';
+    const mins = Math.round((w - now)/60000);
+    if (mins < 60) return `In ${Math.max(mins,1)} min`;
+    return fmtTime(w);
+  }
+  if (dd === 1) return it.allDay ? 'Tomorrow' : `Tomorrow ${fmtTime(w)}`;
+  if (dd < 7) return w.toLocaleDateString([], {weekday:'long'}) + (it.allDay ? '' : ` ${fmtTime(w)}`);
+  if (dd < 14) return `In ${dd} days`;
+  if (dd < 60) return `In ${Math.round(dd/7)} weeks`;
+  return `In ${Math.round(dd/30)} months`;
+}
+function nextOccurrence(it){
+  let w = new Date(it.when); const now = new Date();
+  const step = d => it.repeat==='daily' ? addDays(d,1) : it.repeat==='weekly' ? addDays(d,7) : it.repeat==='monthly' ? addMonths(d,1) : addMonths(d,12);
+  do { w = step(w); } while (it.allDay ? dayDiff(w, now) < 0 : w <= now);
+  return w;
+}
+
+// ---------- render ----------
+const GROUPS = [
+  ['overdue','Slipped by','🫣'], ['today','Today','☀️'], ['tomorrow','Tomorrow','🌙'],
+  ['week','This week','🗓️'], ['later','Coming up','🔭'], ['someday','Someday','☁️']
+];
+
+function render(){
+  const now = new Date();
+  const h = now.getHours();
+  $('today-label').textContent = now.toLocaleDateString([], {weekday:'long', month:'long', day:'numeric'});
+  const g = h < 5 ? ['Up late?','🦉'] : h < 12 ? ['Morning!','👋'] : h < 17 ? ['Hey there.','👋'] : ['Evening!','🌙'];
+  if ($('greeting').dataset.g !== g[0]) { $('greeting').dataset.g = g[0]; $('greeting').innerHTML = `${g[0]} <span class="wave">${g[1]}</span>`; }
+
+  const active = items.filter(i => !i.done).sort((a,b) => {
+    if (!a.when && !b.when) return a.created - b.created;
+    if (!a.when) return 1; if (!b.when) return -1;
+    const A = new Date(a.when), B = new Date(b.when);
+    if (dayDiff(A) === dayDiff(B) && a.allDay !== b.allDay) return a.allDay ? -1 : 1;
+    return A - B;
+  });
+  const by = {}; for (const [k] of GROUPS) by[k] = [];
+  active.forEach(it => by[bucket(it, now)].push(it));
+
+  const nToday = by.today.length, nOver = by.overdue.length;
+  const parts = [];
+  if (nToday) parts.push(`<b>${nToday}</b> thing${nToday>1?'s':''} today`);
+  if (nOver) parts.push(`<b>${nOver}</b> slipped by`);
+  $('summary').innerHTML = parts.length ? parts.join(' · ') : (active.length ? 'Nothing due today. Breathe.' : 'Your head is clear.');
+  document.title = (nToday + nOver) ? `(${nToday + nOver}) Nudge` : 'Nudge';
+
+  // hero: the single next thing
+  const next = active.find(i => i.when && !isOverdue(i, now));
+  const hero = $('hero');
+  if (next) {
+    const w = new Date(next.when);
+    let target = new Date(w); if (next.allDay) target.setHours(0,0,0,0);
+    let ms = Math.max(0, target - now);
+    const d = Math.floor(ms/864e5), hr = Math.floor(ms%864e5/36e5), mi = Math.floor(ms%36e5/6e4);
+    const soon = dayDiff(w, now) <= 1;
+    const isToday = dayDiff(w, now) === 0;
+    let count = '';
+    if (!(next.allDay && isToday)) {
+      const cells = d > 0 ? [[d,'days'],[hr,'hours']] : [[hr,'hours'],[mi,'min']];
+      count = `<div class="count">${cells.map(([v,l]) => `<div><b>${v}</b><span>${l}</span></div>`).join('')}</div>`;
+    }
+    hero.innerHTML = `<div class="hero ${soon ? '' : 'calm'}" data-id="${next.id}">
+      <div class="label">${isToday ? 'Up next · today' : 'Up next'}</div>
+      <div class="title">${esc(next.emoji)} ${esc(next.title)}</div>
+      <div class="when">${fmtDate(w, w.getFullYear()!==now.getFullYear())}${next.allDay ? '' : ' · ' + fmtTime(w)}${next.repeat ? ' · ↻ ' + REPEAT_LABEL[next.repeat].toLowerCase() : ''}</div>
+      ${count}
+    </div>`;
+  } else hero.innerHTML = '';
+
+  // lists
+  const lists = $('lists');
+  if (!active.length) {
+    lists.innerHTML = `<div class="empty"><div class="art">🎈</div><div class="big">Nothing to hold onto.</div>
+      Add something above — try one of these:
+      <div class="examples">
+        <button data-ex="Mom's birthday March 14">Mom's birthday March 14</button>
+        <button data-ex="Pay rent on the 1st every month">Pay rent on the 1st every month</button>
+        <button data-ex="Call the dentist tomorrow morning">Call the dentist tomorrow morning</button>
+        <button data-ex="Take meds every day at 8am">Take meds every day at 8am</button>
+      </div></div>`;
+  } else {
+    lists.innerHTML = GROUPS.filter(([k]) => by[k].length).map(([k,label,icon]) => `
+      <div class="group ${k}"><h2><span class="gi">${icon}</span>${label} <span class="n">${by[k].length}</span></h2>
+        <div class="list">${by[k].map(it => itemHTML(it, now)).join('')}</div>
+      </div>`).join('');
+  }
+
+  // done
+  const done = items.filter(i => i.done).sort((a,b) => (b.doneAt||0) - (a.doneAt||0));
+  $('done-wrap').hidden = !done.length;
+  $('done-summary').textContent = `Done (${done.length})`;
+  $('done-list').innerHTML = done.slice(0,50).map(it => `<div class="done-item"><span>${esc(it.emoji)}</span><s>${esc(it.title)}</s><button class="linkish" data-undone="${it.id}">Bring back</button></div>`).join('');
+
+  // alert for anything that just came due
+  const fresh = by.overdue.filter(i => !i.allDay && (now - new Date(i.when)) < 3600000);
+  $('alert').innerHTML = fresh.length ? `<div class="alert-banner">⏰ <span>Now: <b>${fresh.map(i => esc(i.title)).join(', ')}</b></span></div>` : '';
+}
+
+function itemHTML(it, now){
+  const w = it.when ? new Date(it.when) : null;
+  const meta = [`<span class="rel">${relLabel(it, now)}</span>`];
+  if (w) {
+    const dd = dayDiff(w, now);
+    if (dd >= 7 || dd < -1) meta.push(`<span>${fmtDate(w, w.getFullYear()!==now.getFullYear())}${it.allDay ? '' : ' · ' + fmtTime(w)}</span>`);
+  }
+  if (it.repeat) meta.push(`<span>↻ ${REPEAT_LABEL[it.repeat]}</span>`);
+  if (+it.lead) meta.push(`<span>🔔 ${LEAD_SHORT[it.lead]}</span>`);
+  if (it.notes) meta.push(`<span>📝</span>`);
+  return `<div class="item" data-id="${it.id}">
+    <div class="emo" aria-hidden="true">${esc(it.emoji)}</div>
+    <div class="body" data-edit="${it.id}" role="button" tabindex="0"><div class="t">${esc(it.title)}</div><div class="m">${meta.join('')}</div></div>
+    <div class="acts">
+      <button class="act snooze" data-snooze="${it.id}" title="${bucket(it,now)==='overdue' ? 'Move to today' : 'Push to tomorrow'}" aria-label="Snooze">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg></button>
+      <button class="act done" data-done="${it.id}" title="Done" aria-label="Mark done">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg></button>
+    </div>
+  </div>`;
+}
+
+// ---------- capture ----------
+const input = $('capture-input');
+function updatePreview(){
+  const v = input.value.trim();
+  $('add-btn').disabled = !v;
+  const pv = $('preview');
+  if (!v) { pv.hidden = true; return; }
+  const p = parseInput(v);
+  const chips = [`<span class="chip">${p.emoji} ${esc(p.title)}</span>`];
+  if (p.when) {
+    const w = p.when, now = new Date();
+    chips.push(`<span class="chip">📅 ${dayDiff(w)===0 ? 'Today' : dayDiff(w)===1 ? 'Tomorrow' : fmtDate(w, w.getFullYear()!==now.getFullYear())}</span>`);
+    if (!p.allDay) chips.push(`<span class="chip">⏰ ${fmtTime(w)}</span>`);
+  } else chips.push(`<span class="chip soft">No date · goes to Someday</span>`);
+  if (p.repeat) chips.push(`<span class="chip">↻ ${REPEAT_LABEL[p.repeat]}</span>`);
+  pv.innerHTML = chips.join(''); pv.hidden = false;
+}
+input.addEventListener('input', updatePreview);
+
+function addFromText(text){
+  const v = text.trim(); if (!v) return;
+  const p = parseInput(v);
+  const it = { id: uid(), title: p.title, when: p.when ? p.when.toISOString() : null, allDay: p.allDay, repeat: p.repeat, emoji: p.emoji, notes:'', done:false, created: Date.now(), notified:false };
+  items.push(it); save();
+  input.value = ''; updatePreview(); render();
+  flash(it.id);
+  toast(`Added${p.when ? ' for ' + relLabel(it).toLowerCase().replace(/^in /,'in ') : ''}`, 'Undo', () => { items = items.filter(i => i.id !== it.id); save(); render(); });
+}
+$('capture-form').addEventListener('submit', e => { e.preventDefault(); stopListening(); addFromText(input.value); });
+
+function flash(id){
+  requestAnimationFrame(() => {
+    const el = document.querySelector(`.item[data-id="${id}"]`);
+    if (!el) return; el.classList.add('flash'); el.scrollIntoView({block:'nearest', behavior:'smooth'});
+    setTimeout(() => el.classList.remove('flash'), 1400);
+  });
+}
+
+// ---------- voice ----------
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+const mic = $('mic-btn');
+let rec = null, listening = false, gotFinal = false, typedBefore = '';
+if (!SR) { mic.disabled = true; mic.title = 'Voice needs Chrome, Edge or Safari'; $('hint').textContent = 'Voice input works in Chrome, Edge and Safari. You can always type.'; }
+mic.addEventListener('click', () => listening ? stopListening() : startListening());
+function startListening(){
+  if (!SR) return;
+  rec = new SR();
+  rec.lang = navigator.language || 'en-US';
+  rec.interimResults = true; rec.continuous = false; rec.maxAlternatives = 1;
+  gotFinal = false; typedBefore = input.value.trim();
+  rec.onstart = () => { listening = true; mic.classList.add('listening'); $('hint').textContent = 'Listening… e.g. "Pick up prescription Friday at 4"'; };
+  rec.onresult = e => {
+    let txt = ''; for (const r of e.results) { txt += r[0].transcript; if (r.isFinal) gotFinal = true; }
+    input.value = (typedBefore ? typedBefore + ' ' : '') + txt.trim();
+    updatePreview();
+  };
+  rec.onerror = e => {
+    const msg = e.error === 'not-allowed' || e.error === 'service-not-allowed' ? 'Microphone is blocked — allow it in your browser settings.'
+      : e.error === 'no-speech' ? "Didn't catch anything. Try again?" : e.error === 'network' ? 'Voice needs an internet connection.' : 'Voice hiccup — try again.';
+    toast(msg);
+  };
+  rec.onend = () => {
+    listening = false; mic.classList.remove('listening');
+    $('hint').textContent = "Type or tap the mic. Say it like you'd tell a friend.";
+    if (gotFinal && input.value.trim()) addFromText(input.value); // voice = one tap, auto-saved (with undo)
+  };
+  try { rec.start(); } catch { /* already started */ }
+}
+function stopListening(){ if (rec && listening) { gotFinal = false; rec.stop(); } }
+
+// ---------- list actions ----------
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-done],[data-snooze],[data-edit],[data-undone],[data-ex],.hero');
+  if (!t) return;
+  if (t.dataset.ex) { input.value = t.dataset.ex; updatePreview(); input.focus(); return; }
+  if (t.classList.contains('hero')) return openEditor(t.dataset.id);
+  if (t.dataset.edit) return openEditor(t.dataset.edit);
+  if (t.dataset.done) return complete(t.dataset.done, t);
+  if (t.dataset.snooze) return snooze(t.dataset.snooze);
+  if (t.dataset.undone) { const it = items.find(i => i.id === t.dataset.undone); if (it) { it.done = false; save(); render(); flash(it.id); } }
+});
+document.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.dataset && e.target.dataset.edit) openEditor(e.target.dataset.edit); });
+
+function complete(id, originEl){
+  const it = items.find(i => i.id === id); if (!it) return;
+  if (originEl) confetti(originEl);
+  const before = {...it};
+  const el = document.querySelector(`.item[data-id="${id}"]`);
+  const finish = () => {
+    if (it.repeat && it.when) {
+      it.when = nextOccurrence(it).toISOString(); it.notified = false;
+      toast(`Nice. Next one: ${fmtDate(new Date(it.when))}`, 'Undo', () => { Object.assign(it, before); save(); render(); });
+    } else {
+      it.done = true; it.doneAt = Date.now();
+      toast(cheer(), 'Undo', () => { Object.assign(it, before); save(); render(); });
+    }
+    save(); render();
+  };
+  if (el) { el.classList.add('leaving'); setTimeout(finish, 220); } else finish();
+}
+function confetti(el){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const r = el.getBoundingClientRect(), cx = r.left + r.width/2, cy = r.top + r.height/2;
+  const colors = getComputedStyle(document.documentElement).getPropertyValue('--confetti').split(',').map(c => c.trim()).filter(Boolean);
+  for (let i = 0; i < 26; i++) {
+    const p = document.createElement('i');
+    p.className = 'confetti' + (i % 3 === 0 ? ' round' : '');
+    const a = Math.random() * Math.PI * 2, d = 50 + Math.random() * 90;
+    p.style.cssText = `left:${cx}px;top:${cy}px;background:${colors[i % colors.length]};--dx:${Math.cos(a)*d}px;--dy:${Math.sin(a)*d - 30}px;--r:${(Math.random()*720-360)|0}deg`;
+    document.body.appendChild(p); setTimeout(() => p.remove(), 1000);
+  }
+}
+function cheer(){ const c = ['Done. Nice one. ✓','Off your plate. ✓','One less thing to carry. ✓','Handled. ✓','Look at you go. ✓']; return c[Math.floor(Math.random()*c.length)]; }
+
+function snooze(id){
+  const it = items.find(i => i.id === id); if (!it) return;
+  const before = {...it}; const now = new Date();
+  if (!it.when) { it.when = addDays(startOfDay(now),1).toISOString(); it.allDay = true; }
+  else if (isOverdue(it, now)) {
+    if (it.allDay) it.when = startOfDay(now).toISOString();
+    else { const w = new Date(now.getTime() + 3600000); w.setMinutes(Math.ceil(w.getMinutes()/15)*15, 0, 0); it.when = w.toISOString(); }
+  } else it.when = addDays(new Date(it.when), 1).toISOString();
+  it.notified = false; save(); render(); flash(id);
+  toast(`Moved to ${relLabel(it).toLowerCase()}`, 'Undo', () => { Object.assign(it, before); save(); render(); });
+}
+
+// ---------- editor ----------
+const ed = $('editor'); let editingId = null;
+$('emoji-row').innerHTML = ['✨','🎂','🩺','💊','💸','📞','💼','🎒','✈️','🛒','🐾','🚗','🥂','🧺','🪴','⭐','❤️','🔥'].map(e => `<button type="button" data-emo="${e}">${e}</button>`).join('');
+$('emoji-row').addEventListener('click', e => { const b = e.target.closest('[data-emo]'); if (b) $('ed-emoji').value = b.dataset.emo; });
+const pad = n => String(n).padStart(2,'0');
+const toDateInput = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+function openEditor(id){
+  const it = items.find(i => i.id === id); if (!it) return;
+  editingId = id;
+  $('ed-emoji').value = it.emoji; $('ed-title').value = it.title; $('ed-notes').value = it.notes || '';
+  $('ed-repeat').value = it.repeat || '';
+  $('ed-lead').value = String(it.lead || 0);
+  if (it.when) { const w = new Date(it.when); $('ed-date').value = toDateInput(w); $('ed-time').value = it.allDay ? '' : `${pad(w.getHours())}:${pad(w.getMinutes())}`; }
+  else { $('ed-date').value = ''; $('ed-time').value = ''; }
+  ed.showModal();
+}
+$('ed-quick').addEventListener('click', e => {
+  const q = e.target.dataset.q; if (!q) return; const t = startOfDay(new Date());
+  if (q === 'none') { $('ed-date').value = ''; $('ed-time').value = ''; return; }
+  $('ed-date').value = toDateInput(q==='today' ? t : q==='tomorrow' ? addDays(t,1) : addDays(t, ((1 - t.getDay() + 7) % 7) || 7));
+});
+$('ed-cancel').addEventListener('click', () => ed.close());
+$('ed-form').addEventListener('submit', e => {
+  e.preventDefault();
+  const it = items.find(i => i.id === editingId); if (!it) return ed.close();
+  it.title = $('ed-title').value.trim() || it.title;
+  it.emoji = $('ed-emoji').value.trim() || '✨';
+  it.notes = $('ed-notes').value.trim();
+  it.repeat = $('ed-repeat').value || null;
+  it.lead = +$('ed-lead').value || 0;
+  const dv = $('ed-date').value, tv = $('ed-time').value;
+  if (dv) {
+    const [y,m,d] = dv.split('-').map(Number); const w = new Date(y, m-1, d);
+    if (tv) { const [hh,mm] = tv.split(':').map(Number); w.setHours(hh,mm,0,0); it.allDay = false; } else it.allDay = true;
+    it.when = w.toISOString();
+  } else if (tv) { const w = new Date(); const [hh,mm] = tv.split(':').map(Number); w.setHours(hh,mm,0,0); if (w < new Date()) w.setDate(w.getDate()+1); it.when = w.toISOString(); it.allDay = false; }
+  else { it.when = null; it.allDay = true; }
+  it.notified = false; save(); ed.close(); render(); flash(it.id);
+});
+$('ed-delete').addEventListener('click', () => {
+  const idx = items.findIndex(i => i.id === editingId); if (idx < 0) return;
+  const [gone] = items.splice(idx,1); save(); ed.close(); render();
+  toast('Deleted', 'Undo', () => { items.splice(idx,0,gone); save(); render(); });
+});
+ed.addEventListener('click', e => { if (e.target === ed) ed.close(); });
+
+// ---------- done list ----------
+$('clear-done').addEventListener('click', () => {
+  const before = items.slice(); items = items.filter(i => !i.done); save(); render();
+  toast('Cleared', 'Undo', () => { items = before; save(); render(); });
+});
+
+// ---------- toast ----------
+let toastTimer = null;
+function toast(msg, actionLabel, action){
+  $('toast-msg').textContent = msg;
+  const b = $('toast-btn');
+  if (action) { b.hidden = false; b.textContent = actionLabel; b.onclick = () => { action(); hideToast(); }; } else b.hidden = true;
+  $('toast').classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(hideToast, action ? 5000 : 3000);
+}
+function hideToast(){ $('toast').classList.remove('show'); }
+
+// ---------- reminders / notifications ----------
+// Two layers:
+//  1. Push (via /api + service worker): works when Nudge is closed or the phone is locked.
+//  2. In-tab check every 30s: chime + toast while Nudge is open (and a fallback if push isn't available).
+const nb = $('notif-btn');
+const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const isStandalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+const canPush = 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window && location.protocol === 'https:';
+const swReady = ('serviceWorker' in navigator && location.protocol !== 'file:')
+  ? navigator.serviceWorker.register('/sw.js').then(() => navigator.serviceWorker.ready).catch(() => null)
+  : Promise.resolve(null);
+
+function savePushFlag(){ try { localStorage.setItem(PUSH_KEY, pushOn ? 'on' : 'off'); } catch {} }
+function notifState(){
+  if (!('Notification' in window)) { nb.textContent = '🔕'; nb.title = 'Notifications aren\'t supported here'; return; }
+  const granted = Notification.permission === 'granted';
+  const full = granted && pushOn;
+  nb.textContent = granted ? '🔔' : '🔕';
+  nb.classList.toggle('on', full);
+  nb.title = full ? 'Reminders are on — even when Nudge is closed' : granted ? 'Reminders on while Nudge is open' : 'Turn on reminders';
+}
+
+// ----- schedule: every upcoming ping (incl. heads-ups and repeats) for the next 90 days
+function stepOcc(d, rep){ return rep==='daily' ? addDays(d,1) : rep==='weekly' ? addDays(d,7) : rep==='monthly' ? addMonths(d,1) : addMonths(d,12); }
+function fireTimeFor(it, occ){ const f = new Date(occ); if (it.allDay) f.setHours(9,0,0,0); return f; } // all-day things ping at 9am
+function headsUpText(it, occ, lead){
+  if (it.allDay) return lead >= 1440 ? 'tomorrow' : 'today';
+  if (lead >= 1440) return `tomorrow at ${fmtTime(occ)}`;
+  if (lead >= 60) return `in 1 hour · ${fmtTime(occ)}`;
+  return `in ${lead} min · ${fmtTime(occ)}`;
+}
+function buildSchedule(pastMs = 0){
+  const now = Date.now(), horizon = now + 90*864e5, out = [];
+  for (const it of items) {
+    if (it.done || !it.when) continue;
+    const lead = +it.lead || 0;
+    let occ = new Date(it.when), guard = 0;
+    if (it.repeat) while (fireTimeFor(it,occ).getTime() + 60000 < now - pastMs && guard++ < 3000) occ = stepOcc(occ, it.repeat);
+    guard = 0;
+    while (guard++ < 400) {
+      const fire = fireTimeFor(it, occ).getTime();
+      const pings = [[fire, 0]]; if (lead) pings.push([fire - lead*60000, lead]);
+      for (const [at, l] of pings) {
+        if (at < now - pastMs || at > horizon) continue;
+        const body = l ? `Heads-up — ${headsUpText(it, occ, l)}` : (it.allDay ? 'Happening today' : `Happening now · ${fmtTime(occ)}`);
+        out.push({ k: `${it.id}:${occ.getTime()}:${l}`, at, title: `${it.emoji} ${it.title}`, body: it.notes && !l ? `${body}\n${it.notes}` : body });
+      }
+      if (!it.repeat) break;
+      occ = stepOcc(occ, it.repeat);
+      if (fireTimeFor(it, occ).getTime() - lead*60000 > horizon) break;
+    }
+  }
+  return out.sort((a,b) => a.at - b.at).slice(0, 400);
+}
+
+// ----- push subscription + sync to Netlify
+const b64urlToBytes = s => { const p = '='.repeat((4 - s.length % 4) % 4); const b = atob((s + p).replace(/-/g,'+').replace(/_/g,'/')); return Uint8Array.from(b, c => c.charCodeAt(0)); };
+const sameKey = (buf, bytes) => { if (!buf) return false; const a = new Uint8Array(buf); return a.length === bytes.length && a.every((v,i) => v === bytes[i]); };
+const withTimeout = (p, ms) => Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), ms))]);
+
+let syncTimer = null;
+function scheduleSync(){ if (!pushOn) return; clearTimeout(syncTimer); syncTimer = setTimeout(syncPush, 700); }
+async function getSub(){ const reg = await swReady; return reg ? reg.pushManager.getSubscription() : null; }
+async function syncPush(){
+  try {
+    const sub = await getSub();
+    if (!sub) { pushOn = false; savePushFlag(); notifState(); return false; }
+    const r = await fetch('/api/sync', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({ subscription: sub.toJSON(), schedule: buildSchedule(0) }) });
+    return r.ok;
+  } catch { return false; }
+}
+
+async function enableReminders(){
+  if (!('Notification' in window)) return toast("This browser can't show notifications.");
+  if (isIOS && !isStandalone) return showHelp('ios');
+  const perm = Notification.permission === 'granted' ? 'granted' : await Notification.requestPermission();
+  if (perm !== 'granted') { notifState(); return perm === 'denied' ? showHelp('blocked') : toast('No problem — tap the bell whenever you want reminders.'); }
+  if (!canPush) { notifState(); return toast("Reminders are on while Nudge is open."); }
+  try {
+    const reg = await withTimeout(swReady, 8000); if (!reg) throw new Error('no sw');
+    const res = await fetch('/api/vapid'); if (!res.ok) throw new Error('no api');
+    const { publicKey } = await res.json(); const key = b64urlToBytes(publicKey);
+    let sub = await reg.pushManager.getSubscription();
+    if (sub && !sameKey(sub.options && sub.options.applicationServerKey, key)) { await sub.unsubscribe(); sub = null; }
+    if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: key });
+    pushOn = true; savePushFlag(); notifState();
+    if (!(await syncPush())) throw new Error('sync failed');
+    toast("You're all set! Nudge will ping you even when it's closed.", 'Test it', sendTest);
+  } catch (e) {
+    pushOn = false; savePushFlag(); notifState();
+    toast("Reminders work while Nudge is open. Closed-app alerts need the Netlify setup (see README).");
+  }
+}
+async function sendTest(){
+  try {
+    const sub = await getSub(); if (!sub) throw 0;
+    const r = await fetch('/api/test', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({ subscription: sub.toJSON() }) });
+    if (!r.ok) throw 0;
+    toast('Test sent — it should pop up in a few seconds.');
+  } catch { toast("Couldn't send a test. Try turning reminders off and on again."); }
+}
+async function disableReminders(){
+  try { const sub = await getSub(); if (sub) { fetch('/api/sync', { method:'DELETE', headers:{'content-type':'application/json'}, body: JSON.stringify({ subscription: sub.toJSON() }) }).catch(()=>{}); await sub.unsubscribe(); } } catch {}
+  pushOn = false; savePushFlag(); notifState(); toast('Closed-app reminders are off.');
+}
+nb.addEventListener('click', () => {
+  if (pushOn && Notification.permission === 'granted') return showHelp('on');
+  enableReminders();
+});
+
+function showHelp(kind){
+  const T = {
+    ios: ['One quick step 📲', `<p>iPhone only allows reminders from apps on your Home Screen. It takes 10 seconds:</p>
+      <ol class="steps"><li>Tap the <b>Share</b> button <span aria-hidden="true">(□↑)</span> in Safari</li><li>Choose <b>Add to Home Screen</b></li><li>Open Nudge from your Home Screen and tap the 🔕 bell again</li></ol>
+      <p style="margin-top:12px">Your reminders on this screen don't carry over automatically. Use <b>Back up</b> → <b>Restore</b> at the bottom if you've added some already.</p>`],
+    blocked: ['Notifications are blocked 🙈', `<p>Your browser is set to block them for this site. To fix it:</p>
+      <ol class="steps"><li>Tap the 🔒 / ⓘ icon next to the web address</li><li>Set <b>Notifications</b> to <b>Allow</b></li><li>Reload Nudge and tap the bell</li></ol>`],
+    on: ['Reminders are on 🔔', `<p>Nudge will ping you when something is happening — even if the app is closed or your phone is locked.</p>
+      <ul class="steps"><li>All-day things ping at <b>9:00 AM</b></li><li>Want an earlier heads-up? Tap an item and pick one under <b>Heads-up</b></li></ul>
+      <div class="quick" style="margin-top:14px"><button type="button" id="help-test">Send a test 🔔</button><button type="button" id="help-off">Turn off</button></div>`],
+  }[kind];
+  $('help-title').textContent = T[0]; $('help-body').innerHTML = T[1];
+  const t = $('help-test'), o = $('help-off');
+  if (t) t.onclick = () => { $('help-dlg').close(); sendTest(); };
+  if (o) o.onclick = () => { $('help-dlg').close(); disableReminders(); };
+  $('help-dlg').showModal();
+}
+$('help-done').addEventListener('click', () => $('help-dlg').close());
+
+// ----- in-tab layer
+function chime(){
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [660, 880, 1320].forEach((f,i) => {
+      const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sine'; o.frequency.value = f;
+      const t = ctx.currentTime + i*0.15; g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.16, t+.02); g.gain.exponentialRampToValueAtTime(.001, t+.6);
+      o.connect(g).connect(ctx.destination); o.start(t); o.stop(t+.65);
+    });
+  } catch {}
+}
+const FIRED_KEY = 'nudge.fired';
+let fired = (() => { try { return JSON.parse(localStorage.getItem(FIRED_KEY)) || {}; } catch { return {}; } })();
+async function showLocal(x){
+  try { const reg = await swReady; if (reg) return reg.showNotification(x.title, { body: x.body, tag: x.k, icon: '/icon-192.png' }); new Notification(x.title, { body: x.body, tag: x.k }); } catch {}
+}
+function checkDue(){
+  const now = Date.now();
+  const due = buildSchedule(12*3600000).filter(x => x.at <= now && !fired[x.k]);
+  if (due.length) {
+    due.forEach(x => fired[x.k] = x.at);
+    for (const k in fired) if (fired[k] < now - 3*864e5) delete fired[k];
+    try { localStorage.setItem(FIRED_KEY, JSON.stringify(fired)); } catch {}
+    // With push on, the phone already got a notification — just chime if we're looking at the app right now.
+    const fresh = due.filter(x => now - x.at < (pushOn ? 2*60000 : 12*3600000));
+    if (fresh.length) {
+      chime();
+      if (!pushOn && 'Notification' in window && Notification.permission === 'granted' && document.hidden) fresh.forEach(showLocal);
+      else toast(`⏰ ${fresh[0].title}${fresh.length > 1 ? `  +${fresh.length-1} more` : ''}`);
+    }
+  }
+  render();
+}
+
+// ---------- backup ----------
+$('export-btn').addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify({app:'nudge', version:1, exported:new Date().toISOString(), items}, null, 2)], {type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `nudge-backup-${toDateInput(new Date())}.json`; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+});
+$('import-btn').addEventListener('click', () => $('import-file').click());
+$('import-file').addEventListener('change', async e => {
+  const f = e.target.files[0]; if (!f) return;
+  try {
+    const data = JSON.parse(await f.text()); const incoming = Array.isArray(data) ? data : data.items;
+    if (!Array.isArray(incoming)) throw 0;
+    const ids = new Set(items.map(i => i.id)); let n = 0;
+    incoming.forEach(it => { if (it && it.id && it.title && !ids.has(it.id)) { items.push(it); n++; } });
+    save(); render(); toast(`Restored ${n} item${n===1?'':'s'}`);
+  } catch { toast("That file didn't look like a Nudge backup."); }
+  e.target.value = '';
+});
+
+// ---------- themes ----------
+const THEMES = [
+  {id:'classic',   name:'Classic',   note:'light/dark', bg:'#F4EEE3', card:'#FFFCF6', hero:'#E2553A', dots:['#E2553A','#2F6F5E','#1E1A16'], ink:'#1E1A16'},
+  {id:'bubblegum', name:'Bubblegum', note:'sweet',  bg:'#FFE9F4', card:'#FFFFFF', hero:'linear-gradient(135deg,#FF6FB5,#B36BFF)', dots:['#FF4FA3','#B36BFF','#5BD3FF'], ink:'#3B1E54'},
+  {id:'arcade',    name:'Arcade',    note:'dark',   bg:'#0D0A1F', card:'#1A1533', hero:'linear-gradient(135deg,#6D5BFF,#FF4FD8)', dots:['#7CF7D4','#FF4FD8','#FFE66D'], ink:'#F2EEFF'},
+  {id:'sticker',   name:'Sticker',   note:'bold',   bg:'#FFF1BF', card:'#FFFDF4', hero:'#FF6B35', dots:['#FF6B35','#13877A','#4C6EF5'], ink:'#1D1A10', border:'2px solid #1D1A10'},
+  {id:'lagoon',    name:'Lagoon',    note:'calm',   bg:'#E3F6FB', card:'#FFFFFF', hero:'linear-gradient(135deg,#0096C7,#3DD6C2)', dots:['#0096C7','#3DD6C2','#FFB703'], ink:'#0B2F3A'},
+  {id:'matcha',    name:'Matcha',    note:'earthy', bg:'#EDF1E4', card:'#FBFCF6', hero:'linear-gradient(135deg,#3E6B2A,#86B35F)', dots:['#5E8C31','#C2571A','#E9C46A'], ink:'#1F2A1C'},
+  {id:'sunset',    name:'Sunset',    note:'dark',   bg:'#1E1020', card:'#2B1830', hero:'linear-gradient(135deg,#FF5E62,#FF9966,#FFC371)', dots:['#FF5E62','#FFC371','#C77DFF'], ink:'#FFEDE3'},
+];
+function currentTheme(){ return document.documentElement.dataset.theme || 'classic'; }
+function applyTheme(id){
+  document.documentElement.dataset.theme = id;
+  try { localStorage.setItem('nudge.theme', id); } catch {}
+  requestAnimationFrame(() => { $('meta-theme').content = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim(); });
+  renderThemes();
+}
+function renderThemes(){
+  const cur = currentTheme();
+  $('theme-grid').innerHTML = THEMES.map(t => `<button class="tcard ${t.id===cur?'sel':''}" data-theme-id="${t.id}" style="background:${t.card};color:${t.ink};${t.border?`border:${t.border};`:''}">
+    <div class="sw" style="background:${t.bg}">
+      <div class="bar" style="background:${t.hero}"></div>
+      <div class="dots">${t.dots.map(c => `<i style="background:${c}"></i>`).join('')}</div>
+    </div>
+    <div class="nm">${t.name}<small>${t.id===cur ? '✓' : t.note}</small></div>
+  </button>`).join('');
+}
+$('theme-btn').addEventListener('click', () => { renderThemes(); $('theme-dlg').showModal(); });
+$('theme-grid').addEventListener('click', e => { const b = e.target.closest('[data-theme-id]'); if (b) applyTheme(b.dataset.themeId); });
+$('theme-done').addEventListener('click', () => $('theme-dlg').close());
+$('theme-dlg').addEventListener('click', e => { if (e.target === $('theme-dlg')) $('theme-dlg').close(); });
+applyTheme(currentTheme());
+
+// keyboard: "/" focuses capture
+document.addEventListener('keydown', e => { if (e.key === '/' && document.activeElement !== input && !ed.open) { e.preventDefault(); input.focus(); } });
+window.addEventListener('storage', e => { if (e.key === KEY) { items = load(); render(); } });
+document.addEventListener('visibilitychange', () => { if (!document.hidden) checkDue(); });
+
+notifState();
+checkDue();
+if (pushOn) scheduleSync();
+setInterval(checkDue, 30000);
+</script>
+</body>
+</html>
