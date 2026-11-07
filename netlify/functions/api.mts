@@ -75,7 +75,9 @@ async function sendPush(sub: PushSubscriptionJSON, payload: object, vapid: Vapid
   return res.status
 }
 
+
 type ScheduleEntry = { k: string; at: number; title: string; body: string }
+type Device = { sub: PushSubscriptionJSON; schedule: ScheduleEntry[]; updated: number }
 
 const store = () => getStore({ name: "nudge", consistency: "strong" })
 

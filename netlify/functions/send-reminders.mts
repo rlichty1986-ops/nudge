@@ -149,5 +149,3 @@ export default async (_req: Request, context: Context) => {
 export const config: Config = {
   schedule: "* * * * *", // every minute (UTC; timing is absolute so time zones don't matter)
 }
-
-
