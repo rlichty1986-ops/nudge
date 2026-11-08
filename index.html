@@ -252,6 +252,11 @@
   .themes{padding:22px}
   .themes h3{font-family:var(--display);font-weight:var(--dw);font-size:26px;margin:0 0 4px}
   .themes p{margin:0 0 16px;color:var(--muted);font-size:14px}
+  .cloud-banner{margin-top:18px;background:var(--card);border:var(--bw) dashed var(--accent);border-radius:16px;padding:12px 14px;display:flex;gap:12px;align-items:center;font-size:15px;box-shadow:var(--shadow)}
+  .cloud-banner span{flex:1}
+  .cloud-banner button{border:0;background:var(--accent);color:var(--accent-ink);border-radius:999px;padding:8px 14px;font-weight:700;flex:none}
+  .cloud-banner .x{background:transparent;color:var(--muted);padding:6px}
+  .pin-in{font-size:24px!important;letter-spacing:.3em;text-align:center}
   .steps{margin:0;padding-left:20px;line-height:1.6;font-size:15px}
   .steps li{margin-bottom:6px}
   .theme-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
@@ -311,6 +316,7 @@
     </div>
   </form>
 
+  <div id="cloud-banner"></div>
   <div id="alert"></div>
   <section id="hero"></section>
   <section id="lists"></section>
@@ -321,7 +327,7 @@
   </details>
 
   <footer>
-    <span>Saved on this device only</span>·
+    <button class="linkish" id="cloud-btn">☁️ Cloud backup: off</button>·
     <button class="linkish" id="export-btn">Back up</button>
     <button class="linkish" id="import-btn">Restore</button>
     <input type="file" id="import-file" accept="application/json,.json" hidden>
@@ -381,6 +387,10 @@
     <div id="help-body"></div>
     <div class="ed" style="padding:16px 0 0"><div class="btns"><span class="spacer"></span><button class="btn primary" id="help-done">Got it</button></div></div>
   </div>
+</dialog>
+
+<dialog id="cloud-dlg">
+  <div class="themes"><div id="cloud-body"></div></div>
 </dialog>
 
 <dialog id="theme-dlg">
@@ -571,7 +581,7 @@ let items = load();
 let lastDeleted = null;
 
 function load(){ try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch { return []; } }
-function save(){ try { localStorage.setItem(KEY, JSON.stringify(items)); } catch {} scheduleSync(); }
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(items)); } catch {} markChanged(); scheduleSync(); }
 const uid = () => Math.random().toString(36).slice(2,10) + Date.now().toString(36);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
@@ -696,6 +706,7 @@ function render(){
 
   // alert for anything that just came due
   const fresh = by.overdue.filter(i => !i.allDay && (now - new Date(i.when)) < 3600000);
+  renderCloudBanner();
   $('alert').innerHTML = fresh.length ? `<div class="alert-banner">⏰ <span>Now: <b>${fresh.map(i => esc(i.title)).join(', ')}</b></span></div>` : '';
 }
 
@@ -1092,6 +1103,120 @@ $('import-file').addEventListener('change', async e => {
   e.target.value = '';
 });
 
+
+// ---------- cloud backup ----------
+// A PIN-protected copy of everything on your Netlify site. Saves automatically after every change,
+// and on open pulls the newer copy, so the same PIN keeps your phone and computer in sync.
+const PIN_KEY = 'nudge.pin', UPD_KEY = 'nudge.updated', SAVED_KEY = 'nudge.cloudSaved', NAG_KEY = 'nudge.cloudNag';
+const lsGet = k => { try { return localStorage.getItem(k); } catch { return null; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch {} };
+const lsDel = k => { try { localStorage.removeItem(k); } catch {} };
+let cloudPin = lsGet(PIN_KEY);
+let localUpdated = +lsGet(UPD_KEY) || 0;
+
+function markChanged(){ localUpdated = Date.now(); lsSet(UPD_KEY, String(localUpdated)); scheduleVault(); }
+function writeLocal(){ lsSet(KEY, JSON.stringify(items)); lsSet(UPD_KEY, String(localUpdated)); }
+
+async function vaultCall(body){
+  const r = await fetch('/api/vault', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(body) });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) { const e = new Error(j.error || 'failed'); e.code = j.error || 'offline'; throw e; }
+  return j;
+}
+let vaultTimer = null;
+function scheduleVault(){ if (!cloudPin) return; clearTimeout(vaultTimer); vaultTimer = setTimeout(vaultSave, 1500); }
+async function vaultSave(){
+  if (!cloudPin) return;
+  try { await vaultCall({ pin: cloudPin, action:'save', items, updated: localUpdated }); lsSet(SAVED_KEY, String(Date.now())); cloudStatus(); }
+  catch (e) { if (e.code === 'wrong-pin') { cloudPin = null; lsDel(PIN_KEY); cloudStatus(); toast('Cloud backup needs your PIN again — tap ☁️ at the bottom.'); } }
+}
+async function vaultPull(){
+  if (!cloudPin) return;
+  try {
+    const { vault } = await vaultCall({ pin: cloudPin, action:'load' });
+    if (vault && vault.updated > localUpdated && Array.isArray(vault.items)) {
+      items = vault.items; localUpdated = vault.updated; writeLocal(); render(); scheduleSync();
+      toast('Synced from your cloud backup ☁️');
+    } else if (!vault || vault.updated < localUpdated) vaultSave();
+  } catch {}
+}
+async function connectCloud(pin, recoverOnly){
+  const res = await vaultCall({ pin, action:'recover' });
+  cloudPin = pin; lsSet(PIN_KEY, pin);
+  const have = new Set(items.map(i => i.id)); let added = 0;
+  for (const it of [...((res.vault && res.vault.items) || []), ...(res.recovered || [])]) {
+    if (it && it.id && it.title && !have.has(it.id)) { items.push(it); have.add(it.id); added++; }
+  }
+  save(); render(); cloudStatus();
+  return added;
+}
+
+function cloudStatus(){
+  const b = $('cloud-btn'); if (!b) return;
+  b.textContent = cloudPin ? '☁️ Cloud backup: on' : '☁️ Cloud backup: off';
+}
+function renderCloudBanner(){
+  const el = $('cloud-banner'); if (!el) return;
+  if (cloudPin) { el.innerHTML = ''; return; }
+  const active = items.filter(i => !i.done).length;
+  if (!active) el.innerHTML = `<div class="cloud-banner"><span>☁️ <b>Lost your reminders?</b> Try getting them back.</span><button data-cloud="open">Restore</button></div>`;
+  else if (lsGet(NAG_KEY) !== 'hide') el.innerHTML = `<div class="cloud-banner"><span>☁️ Turn on <b>cloud backup</b> so you never lose these.</span><button data-cloud="open">Turn on</button><button class="x" data-cloud="hide" aria-label="Hide">✕</button></div>`;
+  else el.innerHTML = '';
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-cloud]'); if (!b) return;
+  if (b.dataset.cloud === 'open') openCloud();
+  if (b.dataset.cloud === 'hide') { lsSet(NAG_KEY, 'hide'); renderCloudBanner(); }
+});
+$('cloud-btn').addEventListener('click', openCloud);
+
+function cloudErr(e){
+  return e.code === 'wrong-pin' ? "That PIN doesn't match the one this app was set up with."
+    : e.code === 'locked' ? 'Too many wrong tries — wait 15 minutes and try again.'
+    : "Couldn't reach the cloud. Check your connection and try again.";
+}
+function openCloud(){
+  const body = $('cloud-body');
+  if (!cloudPin) {
+    const empty = !items.filter(i => !i.done).length;
+    body.innerHTML = `<h3>☁️ Cloud backup</h3>
+      <p>${empty ? '<b>Lost your reminders?</b> Enter your PIN (or choose one now). Nudge will bring back your backup <i>and</i> anything it saved for notifications.<br><br>' : ''}Nudge will back up automatically after every change. Use the same PIN on any phone or computer to get everything back.</p>
+      <div class="ed" style="padding:0;gap:10px">
+        <label>Your PIN (at least 4 digits)<input id="cloud-pin" class="pin-in" type="text" inputmode="numeric" autocomplete="off" maxlength="12"></label>
+        <p style="margin:0;font-size:13px;color:var(--muted)">The first PIN ever set becomes this app's PIN. Screenshot it or write it down somewhere safe.</p>
+        <div class="btns"><span class="spacer"></span><button type="button" class="btn ghost" data-cl="close">Cancel</button><button type="button" class="btn primary" data-cl="go">Turn on</button></div>
+      </div>`;
+    setTimeout(() => $('cloud-pin').focus(), 50);
+  } else {
+    const saved = +lsGet(SAVED_KEY);
+    body.innerHTML = `<h3>☁️ Backup is on</h3>
+      <p>Every change is saved automatically${saved ? ` — last saved ${new Date(saved).toLocaleString([], {weekday:'short', hour:'numeric', minute:'2-digit'})}` : ''}. On another phone or computer, open Nudge, tap <b>☁️ Cloud backup</b> and enter the same PIN.</p>
+      <div class="quick"><button type="button" data-cl="recover">🔍 Look for missing reminders</button><button type="button" data-cl="off">Turn off on this device</button></div>
+      <div class="ed" style="padding:16px 0 0"><div class="btns"><span class="spacer"></span><button type="button" class="btn primary" data-cl="close">Done</button></div></div>`;
+  }
+  $('cloud-dlg').showModal();
+}
+$('cloud-dlg').addEventListener('click', async e => {
+  if (e.target === $('cloud-dlg')) return $('cloud-dlg').close();
+  const b = e.target.closest('[data-cl]'); if (!b) return;
+  const a = b.dataset.cl;
+  if (a === 'close') return $('cloud-dlg').close();
+  if (a === 'off') { cloudPin = null; lsDel(PIN_KEY); cloudStatus(); renderCloudBanner(); $('cloud-dlg').close(); return toast('Cloud backup is off on this device.'); }
+  const pin = a === 'go' ? ($('cloud-pin').value || '').trim() : cloudPin;
+  if (a === 'go' && (pin.length < 4)) return toast('Use at least 4 digits.');
+  b.disabled = true; const old = b.textContent; b.textContent = 'Working…';
+  try {
+    const n = await connectCloud(pin);
+    $('cloud-dlg').close();
+    toast(n ? `☁️ Brought back ${n} reminder${n===1?'':'s'}!` : (a === 'go' ? '☁️ Cloud backup is on. You\'re safe now.' : 'Nothing missing — you have everything.'));
+  } catch (err) { toast(cloudErr(err)); }
+  finally { b.disabled = false; b.textContent = old; }
+});
+$('cloud-dlg').addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.id === 'cloud-pin') { e.preventDefault(); $('cloud-dlg').querySelector('[data-cl="go"]').click(); } });
+
+// Ask the browser to treat Nudge's storage as important (makes Android much less likely to clear it).
+try { navigator.storage && navigator.storage.persist && navigator.storage.persist().catch(() => {}); } catch {}
+
 // ---------- themes ----------
 const THEMES = [
   {id:'classic',   name:'Classic',   note:'light/dark', bg:'#F4EEE3', card:'#FFFCF6', hero:'#E2553A', dots:['#E2553A','#2F6F5E','#1E1A16'], ink:'#1E1A16'},
@@ -1133,6 +1258,8 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) chec
 notifState();
 checkDue();
 if (pushOn) scheduleSync();
+cloudStatus();
+vaultPull();
 setInterval(checkDue, 30000);
 </script>
 </body>
